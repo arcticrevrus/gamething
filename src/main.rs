@@ -25,7 +25,7 @@ fn main() {
                     max_health: None,
                     current_health: None,
                     damage: None,
-                    representation: vec!['^', 'v', '<', '>'],
+                    representation: vec!['X'],
                 })
             }
         }
@@ -43,7 +43,7 @@ fn main() {
         max_health: Some(3 * 4),
         current_health: Some(3 * 4),
         damage: Some(1),
-        representation: vec!['X'],
+        representation: vec!['^', 'v', '<', '>'],
     });
     render::render(objects);
 }
