@@ -1,4 +1,8 @@
-#[derive(Clone)]
+use serde::Serialize;
+use std::fs::File;
+use std::io::prelude::*;
+
+#[derive(Clone, Serialize)]
 pub enum ObjectType {
     Wall,
     Enemy(EnemyType),
@@ -7,25 +11,25 @@ pub enum ObjectType {
     Water,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub enum EnemyType {
     Octorok,
     Dodongo,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub enum ItemType {
     Rupee,
     Heart,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Serialize)]
 pub struct Position {
     pub x: i32,
     pub y: i32,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Objects {
     pub object_type: Option<ObjectType>,
     pub position: Position,
@@ -76,7 +80,7 @@ impl Objects {
     }
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Serialize)]
 pub enum Direction {
     Up,
     Down,
@@ -86,6 +90,24 @@ pub enum Direction {
 
 pub struct PlayField {
     pub entities: Vec<Objects>,
+}
+
+#[derive(Serialize)]
+pub struct MapFormat {
+    pub objects: Vec<Objects>,
+}
+
+impl MapFormat {
+    pub fn write_to_disk(&self) {
+        let mut file = File::create_new("map.map").unwrap_or_else(|error| {
+            panic!("Problem creating file: {error:?}");
+        });
+
+        let json_data = serde_json::to_string(&self).expect("Failed to serialize map");
+        file.write_all(json_data.as_bytes())
+            .expect("Failed to write map data to file");
+        println!("Wrote map to disk");
+    }
 }
 
 pub fn check_collision(object: &Objects, direction: &Direction, playfield: &PlayField) -> bool {

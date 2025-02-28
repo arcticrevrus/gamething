@@ -1,6 +1,6 @@
 use crate::objects;
 
-pub fn render(playfield: objects::PlayField) {
+pub fn render(playfield: &objects::PlayField) {
     let mut current_x: i32 = 0;
     let mut current_y: i32 = 0;
     for object in &playfield.entities {}

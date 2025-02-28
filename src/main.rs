@@ -45,5 +45,9 @@ fn main() {
         damage: Some(1),
         representation: vec!['^', 'v', '<', '>'],
     });
-    render::render(objects);
+    render::render(&objects);
+    let map: objects::MapFormat = objects::MapFormat {
+        objects: objects.entities,
+    };
+    map.write_to_disk();
 }
